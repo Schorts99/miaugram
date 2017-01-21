@@ -33,7 +33,7 @@ function compile(watch) {
 
   function rebundle() {
     bundle
-      .transform(babel, { presets: [ 'es2016' ], plugins: [ 'syntax-async-functions', 'transform-regenerator' ] })
+      .transform(babel, { presets: [ 'es2015' ], plugins: [ 'syntax-async-functions', 'transform-regenerator' ] })
       .bundle()
       .on('error', function (err) { console.log(err); this.emit('end') })
       .pipe(source('index.js'))

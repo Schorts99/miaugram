@@ -60,18 +60,13 @@ app.post('/api/pictures', function (req, res) {
 })
 
 app.get('/api/user/:username', (req, res) => {
-  const user = {
-    username: 'MiauMiau',
-    avatar: 'https://scontent-dft4-1.cdninstagram.com/t51.2885-19/s150x150/14607014_979200455518856_6501924825026527232_a.jpg',
-    pictures: [
-      {
-        id: 1,
-        src: 'mom.jpg',
-        likes: 24
-      }
-    ]
-  }
-  res.send(user);
+  var username = req.params.username;
+
+  client.getUser(username, function (err, user) {
+    if (err) return res.status(404).send({ error: 'User not found' })
+    
+    res.send(user);
+  });
 })
 
 app.get('/:username', function (req, res) {
