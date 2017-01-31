@@ -3,15 +3,16 @@ var template = require('./template');
 var title = require('title');
 var empty = require('empty-element');
 var header = require('../header');
+var utils = require('../utils');
 
-page('/:username', loadUser, header, function (ctx, next) {
+page('/:username', loadUser, utils.loadAuth, header, function (ctx, next) {
   var main = document.getElementById('main-container');
   title(`Miaugram - ${ctx.user.username}`);
   empty(main).appendChild(template(ctx.user));
   $('.modal-trigger').leanModal();
 });
 
-page('/:username/:id', loadUser, header, function (ctx, next) {
+page('/:username/:id', loadUser, utils.loadAuth, header, function (ctx, next) {
   var main = document.getElementById('main-container');
   title(`Miaugram - ${ctx.user.username}`);
   empty(main).appendChild(template(ctx.user));

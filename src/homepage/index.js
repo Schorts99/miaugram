@@ -7,8 +7,12 @@ var header = require('../header');
 var axios = require('axios');
 var Webcam = require('webcamjs');
 var picture = require('../picture-card');
+var io = require('socket.io-client');
+var utils = require('../utils');
 
-page('/', header, loading, asyncLoad, function (ctx, next) {
+var socket = io.connect('http://localhost:5151');
+
+page('/', utils.loadAuth, header, loading, asyncLoad, function (ctx, next) {
   title('Miaugram');
   var main = document.getElementById('main-container');
 
@@ -44,16 +48,6 @@ page('/', header, loading, asyncLoad, function (ctx, next) {
           camaraInput.addClass('hide');
           uploadButton.off('click');
           uploadButton.click(() =>{
-            const pic = {
-              url: data_uri,
-              likes: 11,
-              liked: false,
-              createdAt: +new Date(),
-              user: {
-                username: 'MiauMiau',
-                avatar: 'https://scontent-dft4-1.cdninstagram.com/t51.2885-19/s150x150/14607014_979200455518856_6501924825026527232_a.jpg'
-              }
-            }
             $('#picture-cards').prepend(picture(pic));
             reset();
             $('#modalCamara').closeModal();
@@ -67,6 +61,14 @@ page('/', header, loading, asyncLoad, function (ctx, next) {
     }
   })
 })
+
+socket.on('image', function (image) {
+  var picturesEl = document.getElementById('pictures-container');
+  var first = picturesEl.firstChild;
+  var img = picture(image);
+
+  picturesEl.insertBefore(img, first);
+});
 
 function loading(ctx, next) {
   var container = document.createElement('div');
